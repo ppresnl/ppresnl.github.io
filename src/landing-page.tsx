@@ -153,7 +153,7 @@ const LandingPage = () => {
           </BodyText>
           <JoinOfferBox
             as="a"
-            href="https://cascadeai.gumroad.com/l/veyqs?wanted=true"
+            href="https://neurolock.gumroad.com/l/fehbt?wanted=true"
             target="_blank"
             rel="noopener noreferrer"
           >
