@@ -16,9 +16,9 @@ const LandingPage = () => {
 
   // Parallax fade-in for 'Why it can't wait' section
   const whyWaitStatements = [
-    '• False promises became No.1 marketing tactic',
-    '• Competition is over who lies bigger (not product quality)',
-    '• This leads to financial and mental damage for consumers by creating unrealistic expectations',
+    '• False promise became No.1 marketing tactic',
+    '• Competition is over who lies bigger\n(not product quality)',
+    '• This leads to financial and mental damage for consumers',
   ];
   const whyWaitParallax = useParallax();
 
@@ -34,122 +34,90 @@ const LandingPage = () => {
 
   return (
     <PageContainer>
-      {/* Hero Section - Updated */}
+      {/* Hero Section */}
       <HeroSection>
         <ContentWrapper>
           <MainHeading>
-            Never trust a wrong person again
+            Filtered, honest internet for a price of coffee
           </MainHeading>
           <HeroSubText>
-            Join our verified trust network
+            join our verified trust network for $0.99 yearly
           </HeroSubText>
         </ContentWrapper>
       </HeroSection>
 
-      {/* Why it can't wait section with parallax fade-in */}
-      {/* Why it can't wait section with working parallax fade-in */}
-      <ParallaxTallContainer ref={whyWaitParallax.ref as React.RefObject<HTMLDivElement>}>
-        <ParallaxStickyInner>
-          <ContentWrapper style={{ maxWidth: '100vw' }}>
-            <SubHeading>
-              Why it can't wait
-            </SubHeading>
-            <div style={{ textAlign: 'left', margin: '32px auto', maxWidth: 950, padding: '0 24px' }}>
-              {whyWaitStatements.map((text, i) => {
-                // Fade in each statement at 0.15, 0.45, 0.75 progress
-                const fadeStart = 0.15 + i * 0.3;
-                const fade = Math.min(1, Math.max(0, (whyWaitParallax.scrollProgress - fadeStart) / 0.18));
-                return (
-                  <BodyText as="div" key={i} style={{ marginBottom: 16, opacity: fade, transition: 'opacity 0.5s' }}>{text}</BodyText>
-                );
-              })}
-            </div>
-          </ContentWrapper>
-        </ParallaxStickyInner>
-      </ParallaxTallContainer>
+      {/* What you get section */}
+      <Section>
+        <ContentWrapper>
+          <SubHeading>What you get</SubHeading>
+          <HowItWorksRow>
+            <HowItWorksColumn left>
+              <ColumnSubheading>
+                Star ratings and analytics<br />for products and creators
+              </ColumnSubheading>
+              <HowItWorksImage>
+                <img src="/HIW1.png" alt="Ratings and Analytics" />
+              </HowItWorksImage>
+            </HowItWorksColumn>
+            <HowItWorksColumn>
+              <ColumnSubheading>
+                Hide (or not) at your<br />desired trust level
+              </ColumnSubheading>
+              <HowItWorksImage>
+                <img src="/HIW2.png" alt="Trust Filter Cards" />
+              </HowItWorksImage>
+            </HowItWorksColumn>
+          </HowItWorksRow>
+        </ContentWrapper>
+      </Section>
 
+      {/* Why it can't wait section */}
+      <Section>
+        <ContentWrapper>
+          <SubHeading>
+            Why it can't wait
+          </SubHeading>
+          <div style={{ textAlign: 'left', margin: '32px auto', maxWidth: 950, padding: '0 24px' }}>
+            {whyWaitStatements.map((text, i) => (
+              <BodyText as="div" key={i} style={{ marginBottom: 16 }}>{text}</BodyText>
+            ))}
+          </div>
+        </ContentWrapper>
+      </Section>
 
+      {/* How do we rate section */}
+      <Section>
+        <ContentWrapper>
+          <SubHeading>
+            How do we rate
+          </SubHeading>
+          <BodyText style={{ marginBottom: 32, fontWeight: 300 }}>
+            We combine background checks, AI analytics and journalistic<br />
+            investigations data to warn you from online dangers
+          </BodyText>
 
-      {/* How did we solve it section - Parallax Sticky Stars */}
-      <section
-        ref={starsParallax.ref as React.RefObject<HTMLElement>}
-        style={{ height: '300vh', position: 'relative', width: '100%' }}
-      >
-        <div
-          style={{
-            position: 'sticky',
-            top: 0,
-            height: '100vh',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            background: '#fff',
-            zIndex: 2,
-          }}
-        >
-          <ContentWrapper>
-            <SubHeading>
-              Solution
-            </SubHeading>
-            <BodyText style={{ marginBottom: 32, fontWeight: 300 }}>
-              Transparent trust scores for everyone<br />
-              — creators, influencers, and soon, businesses
-            </BodyText>
+          <StarsContainer style={{ margin: '32px 0' }}>
+            {[...Array(5)].map((_, index) => (
+              <StarWrapper key={index}>
+                <div style={{ opacity: 0.2 }}>
+                  <FaStar size={40} color="#D9D9D9" />
+                </div>
+              </StarWrapper>
+            ))}
+          </StarsContainer>
 
-            <StarsContainer style={{ margin: '32px 0' }}>
-              {[...Array(5)].map((_, index) => (
-                <StarWrapper key={index}>
-                  <FaStar size={40} color="#D9D9D9" style={{ opacity: 0.2 }} />
-                  <FaStar
-                    size={40}
-                    color={getStarFill(index, starsParallax.scrollProgress)}
-                    style={{ position: 'absolute', top: 0, left: 0 }}
-                  />
-                </StarWrapper>
-              ))}
-            </StarsContainer>
+          <BodyText style={{ marginTop: 32, fontWeight: 300 }}>
+            We assign trust ratings to public personas, creators and<br />
+            soon businesses
+          </BodyText>
+        </ContentWrapper>
+      </Section>
 
-            <BodyText style={{ marginTop: 32, fontWeight: 300 }}>
-              Give your attention to those who earn it—<br />
-              not those who exploit it
-            </BodyText>
-          </ContentWrapper>
-        </div>
-      </section>
-
-      {/* How it works section with two columns */}
-      {/* How it works section with parallax fade-in for cards */}
-      <ParallaxTallContainer ref={howItWorksParallax.ref as React.RefObject<HTMLDivElement>}>
-        <ParallaxStickyInner>
-          <ContentWrapper>
-            <SubHeading>How it works</SubHeading>
-            <HowItWorksRow>
-              <HowItWorksColumn left>
-                <ColumnSubheading style={{ maxWidth: 440, textAlign: 'left', margin: '0 auto 32px auto', wordBreak: 'break-word', whiteSpace: 'normal' }}>
-                  See ratings and analytics<br />for products and creators
-                </ColumnSubheading>
-                <HowItWorksImage style={{ opacity: leftCardOpacity, transition: 'opacity 0.6s' }}>
-                  <img src="/HIW1.png" alt="AG1 Ratings Popup" />
-                </HowItWorksImage>
-              </HowItWorksColumn>
-              <HowItWorksColumn>
-                <ColumnSubheading>
-                  Hide (or not) at your<br />desired trust level
-                </ColumnSubheading>
-                <HowItWorksImage style={{ opacity: rightCardOpacity, transition: 'opacity 0.6s' }}>
-                  <img src="/HIW2.png" alt="Trust Filter Cards" />
-                </HowItWorksImage>
-              </HowItWorksColumn>
-            </HowItWorksRow>
-          </ContentWrapper>
-        </ParallaxStickyInner>
-      </ParallaxTallContainer>
-
-      {/* Final Section - unchanged */}
+      {/* Final Section */}
       <FinalSection>
         <ContentWrapper>
           <BodyText as="div" style={{ margin: 0, fontWeight: 300, fontSize: 40, lineHeight: '60px' }}>
-            We’ll keep every liar in check
+            We'll keep every liar in check
           </BodyText>
           <JoinOfferBox
             as="a"
@@ -163,7 +131,7 @@ const LandingPage = () => {
             </JoinPrice>
           </JoinOfferBox>
           <OfferSubText>
-            Get 1 year free before November, 1<br />
+            We go live on November 1, don't miss our pre-sale special<br />
             Support the movement towards a cleaner happier life!
           </OfferSubText>
         </ContentWrapper>
