@@ -42,8 +42,10 @@ const LandingPage = () => {
               <span className="desktopOnly">Crucial info when it matters -</span>
               <span className="mobileOnly">Crucial info when it matters</span>
               <span className="secondLine desktopOnly">real-time warnings, ratings, and red flags</span>
-              <span className="secondLine mobileOnly">real-time warnings, ratings,</span>
-              <span className="secondLine redFlags mobileOnly">and red flags</span>
+              <span className="secondLine mobileOnly">
+                real-time warnings, ratings,<br />
+                and red flags
+              </span>
             </MainHeading>
           </MainHeadingContainer>
           
@@ -77,19 +79,27 @@ const LandingPage = () => {
         </ContentWrapper>
       </HeroSection>
 
-      {/* Why it can't wait section - static version with margin */}
-      <section style={{ marginTop: '280px' }}>
-        <ContentWrapper style={{ maxWidth: '100vw' }}>
-          <SubHeading>
-            Why it can't wait
-          </SubHeading>
-          <div style={{ textAlign: 'left', margin: '32px auto', maxWidth: 950, padding: '0 24px' }}>
-            {whyWaitStatements.map((text, i) => (
-              <BodyText as="div" key={i} style={{ marginBottom: 16 }}>{text}</BodyText>
-            ))}
-          </div>
-        </ContentWrapper>
-      </section>
+      {/* Why it can't wait section with parallax fade-in */}
+      {/* Why it can't wait section with working parallax fade-in */}
+      <ParallaxTallContainer ref={whyWaitParallax.ref as React.RefObject<HTMLDivElement>}>
+        <ParallaxStickyInner>
+          <ContentWrapper style={{ maxWidth: '100vw' }}>
+            <SubHeading>
+              Why it can't wait
+            </SubHeading>
+            <div style={{ textAlign: 'left', margin: '32px auto', maxWidth: 950, padding: '0 24px' }}>
+              {whyWaitStatements.map((text, i) => {
+                // Fade in each statement at 0.15, 0.45, 0.75 progress
+                const fadeStart = 0.15 + i * 0.3;
+                const fade = Math.min(1, Math.max(0, (whyWaitParallax.scrollProgress - fadeStart) / 0.18));
+                return (
+                  <BodyText as="div" key={i} style={{ marginBottom: 16, opacity: fade, transition: 'opacity 0.5s' }}>{text}</BodyText>
+                );
+              })}
+            </div>
+          </ContentWrapper>
+        </ParallaxStickyInner>
+      </ParallaxTallContainer>
 
 
 
@@ -244,7 +254,8 @@ const ContentWrapper = styled.div`
   
   @media (max-width: 768px) {
     padding: 10px 0 20px;
-    width: 95%;
+    width: 98%;
+    max-width: 98vw;
   }
   
   .hero-section & {
@@ -274,7 +285,8 @@ const MainHeadingContainer = styled.div`
   
   .hero-section & {
     @media (max-width: 768px) {
-      margin: 0;
+      margin-top: 60px; /* extra top spacing */
+      margin-bottom: 80px; /* doubled spacing below heading */
       padding: 0;
       width: 100vw;
       max-width: 100vw;
@@ -330,16 +342,7 @@ const MainHeading = styled.h1`
       text-align: center;
       padding: 0 5px;
       white-space: nowrap;
-      margin-top: 5px;
-    }
-    
-    span.redFlags {
-      margin-top: 0;
-      display: block;
-    }
-    
-    span.secondLine.desktopOnly {
-      display: none;
+      margin-top: 10px;
     }
   }
 `;
@@ -671,8 +674,9 @@ const HeroSection = styled.section.attrs({ className: 'hero-section' })`
   
   @media (max-width: 768px) {
     padding: 0;
-    min-height: 75vh; /* 3/4 of viewport height */
-    overflow: visible; /* Ensure content doesn't get clipped */
+    min-height: 90vh; /* show full hero plus some overhang */
+    padding-bottom: 120px; /* allow images to peek */
+    overflow: visible;
     position: relative;
     justify-content: flex-start;
   }
@@ -933,22 +937,15 @@ const HeroFlexContainer = styled.div`
   }
 
   @media (max-width: 768px) {
-    gap: 5px;
+    margin-top: 20px; /* doubled spacing under heading */
+    gap: 8px;
     width: 100%;
     align-items: center;
     padding-bottom: 10px;
     margin-bottom: 0;
   }
   
-  .hero-section & {
-    @media (max-width: 768px) {
-      padding-bottom: 0;
-      position: absolute;
-      top: 55vh; /* Position much lower on the viewport */
-      z-index: 2; /* Ensure it appears above other elements */
-      transform: scale(0.9); /* Slightly scale down images */
-    }
-  }
+
 `;
 
 const InvestigationsContainer = styled.div`
@@ -975,10 +972,10 @@ const InvestigationsContainer = styled.div`
   }
 
   @media (max-width: 768px) {
-    width: 95%;
-    max-width: 480px;
+    width: 100%;
+    max-width: 100%;
     min-height: auto;
-    margin: 0 auto;
+    margin: 20px auto 0; /* add space above investigations */
     padding: 40px 5px 5px 5px; /* Increased top padding for mobile view */
     align-self: center;
     display: flex;
@@ -1006,9 +1003,9 @@ const ProductImageSection = styled.div`
   }
   
   @media (max-width: 768px) {
-    width: 95%;
-    max-width: 480px;
-    min-height: 160px; /* Reduced height for better mobile spacing */
+    width: 100%;
+    max-width: 100%;
+    min-height: 260px; /* ensure space equals image height */
   }
 `;
 
@@ -1045,7 +1042,8 @@ const ProductImageContainer = styled.div`
   
   /* Keep positions absolute on all screen sizes */
   @media (max-width: 768px) {
-    width: 75%;
+    position: static; /* allow container to contribute to flow */
+    width: 100%;
   }
 `;
 
