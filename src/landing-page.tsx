@@ -16,9 +16,9 @@ const LandingPage = () => {
 
   // Parallax fade-in for 'Why it can't wait' section
   const whyWaitStatements = [
-    '• False promise became No.1 marketing tactic',
-    '• Competition is over who lies bigger\n(not product quality)',
-    '• This leads to financial and mental damage for consumers',
+    '• False promises became No.1 marketing tactic',
+    '• Competition is over who lies bigger (not product quality)',
+    '• This leads to financial and mental damage for consumers by creating unrealistic expectations',
   ];
   const whyWaitParallax = useParallax();
 
@@ -34,90 +34,149 @@ const LandingPage = () => {
 
   return (
     <PageContainer>
-      {/* Hero Section */}
+      {/* Hero Section - Updated with Table */}
       <HeroSection>
         <ContentWrapper>
-          <MainHeading>
-            Filtered, honest internet for a price of coffee
-          </MainHeading>
-          <HeroSubText>
-            join our verified trust network for $0.99 yearly
-          </HeroSubText>
+          <MainHeadingContainer>
+            <MainHeading>
+              Crucial info when it matters -<br />
+              real-time warnings, ratings, and red flags
+            </MainHeading>
+          </MainHeadingContainer>
+          
+          {/* Hero section: two containers - (1) product/trust images, (2) investigations table */}
+          <HeroFlexContainer>
+            <ProductImageSection>
+              <ProductImageContainer>
+                <img src="/Slide11.png" alt="AG1 website on laptop" />
+              </ProductImageContainer>
+              <TrustRatingContainer>
+                <img src="/Slide12.png" alt="Trust rating details" />
+              </TrustRatingContainer>
+            </ProductImageSection>
+
+            <InvestigationsContainer>
+              <InvestigationTitle>AG1 Investigations:</InvestigationTitle>
+              <InvestigationList>
+                <InvestigationItem as="a" href="https://b2bnews.co.nz/articles/fda-investigates-ag1-amid-serious-liver-harm-reports/" target="_blank" rel="noopener noreferrer">
+                  <LinkIcon>🔗</LinkIcon> FDA Investigates AG1 Amid Serious Liver Harm Reports
+                </InvestigationItem>
+                <InvestigationItem as="a" href="https://www.nzherald.co.nz/business/billion-dollar-company-ag1-founder-chris-ashenden-resigns-amid-scrutiny-of-nz-criminal-history/SBBOE7BOCBDJNNBDRND3KCH2PA/" target="_blank" rel="noopener noreferrer">
+                  <LinkIcon>🔗</LinkIcon> AG1 founder resigns amid scrutiny of criminal history
+                </InvestigationItem>
+                <InvestigationItem as="a" href="https://www.mcgill.ca/oss/article/critical-thinking-health-and-nutrition/you-probably-dont-need-green-ag1-smoothie" target="_blank" rel="noopener noreferrer">
+                  <LinkIcon>🔗</LinkIcon> You Probably Don't Need that Green AG1 Smoothie
+                </InvestigationItem>
+              </InvestigationList>
+              <MoreLink as="a" href="#" target="_blank" rel="noopener noreferrer">More</MoreLink>
+            </InvestigationsContainer>
+          </HeroFlexContainer>
         </ContentWrapper>
       </HeroSection>
 
-      {/* What you get section */}
-      <Section>
-        <ContentWrapper>
-          <SubHeading>What you get</SubHeading>
-          <HowItWorksRow>
-            <HowItWorksColumn left>
-              <ColumnSubheading>
-                Star ratings and analytics<br />for products and creators
-              </ColumnSubheading>
-              <HowItWorksImage>
-                <img src="/HIW1.png" alt="Ratings and Analytics" />
-              </HowItWorksImage>
-            </HowItWorksColumn>
-            <HowItWorksColumn>
-              <ColumnSubheading>
-                Hide (or not) at your<br />desired trust level
-              </ColumnSubheading>
-              <HowItWorksImage>
-                <img src="/HIW2.png" alt="Trust Filter Cards" />
-              </HowItWorksImage>
-            </HowItWorksColumn>
-          </HowItWorksRow>
-        </ContentWrapper>
-      </Section>
+      {/* Why it can't wait section with parallax fade-in */}
+      {/* Why it can't wait section with working parallax fade-in */}
+      <ParallaxTallContainer ref={whyWaitParallax.ref as React.RefObject<HTMLDivElement>}>
+        <ParallaxStickyInner>
+          <ContentWrapper style={{ maxWidth: '100vw' }}>
+            <SubHeading>
+              Why it can't wait
+            </SubHeading>
+            <div style={{ textAlign: 'left', margin: '32px auto', maxWidth: 950, padding: '0 24px' }}>
+              {whyWaitStatements.map((text, i) => {
+                // Fade in each statement at 0.15, 0.45, 0.75 progress
+                const fadeStart = 0.15 + i * 0.3;
+                const fade = Math.min(1, Math.max(0, (whyWaitParallax.scrollProgress - fadeStart) / 0.18));
+                return (
+                  <BodyText as="div" key={i} style={{ marginBottom: 16, opacity: fade, transition: 'opacity 0.5s' }}>{text}</BodyText>
+                );
+              })}
+            </div>
+          </ContentWrapper>
+        </ParallaxStickyInner>
+      </ParallaxTallContainer>
 
-      {/* Why it can't wait section */}
-      <Section>
-        <ContentWrapper>
-          <SubHeading>
-            Why it can't wait
-          </SubHeading>
-          <div style={{ textAlign: 'left', margin: '32px auto', maxWidth: 950, padding: '0 24px' }}>
-            {whyWaitStatements.map((text, i) => (
-              <BodyText as="div" key={i} style={{ marginBottom: 16 }}>{text}</BodyText>
-            ))}
-          </div>
-        </ContentWrapper>
-      </Section>
 
-      {/* How do we rate section */}
-      <Section>
-        <ContentWrapper>
-          <SubHeading>
-            How do we rate
-          </SubHeading>
-          <BodyText style={{ marginBottom: 32, fontWeight: 300 }}>
-            We combine background checks, AI analytics and journalistic<br />
-            investigations data to warn you from online dangers
-          </BodyText>
 
-          <StarsContainer style={{ margin: '32px 0' }}>
-            {[...Array(5)].map((_, index) => (
-              <StarWrapper key={index}>
-                <div style={{ opacity: 0.2 }}>
-                  <FaStar size={40} color="#D9D9D9" />
-                </div>
-              </StarWrapper>
-            ))}
-          </StarsContainer>
+      {/* How did we solve it section - Parallax Sticky Stars */}
+      <section
+        ref={starsParallax.ref as React.RefObject<HTMLElement>}
+        style={{ height: '300vh', position: 'relative', width: '100%' }}
+      >
+        <div
+          style={{
+            position: 'sticky',
+            top: 0,
+            height: '100vh',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            background: '#fff',
+            zIndex: 2,
+          }}
+        >
+          <ContentWrapper>
+            <SubHeading>
+              Solution
+            </SubHeading>
+            <BodyText style={{ marginBottom: 32, fontWeight: 300 }}>
+              Transparent trust scores for everyone<br />
+              — creators, influencers, and soon, businesses
+            </BodyText>
 
-          <BodyText style={{ marginTop: 32, fontWeight: 300 }}>
-            We assign trust ratings to public personas, creators and<br />
-            soon businesses
-          </BodyText>
-        </ContentWrapper>
-      </Section>
+            <StarsContainer style={{ margin: '32px 0' }}>
+              {[...Array(5)].map((_, index) => (
+                <StarWrapper key={index}>
+                  <EmptyStar size={40} />
+                  <StarOverlay 
+                    size={40}
+                    color={getStarFill(index, starsParallax.scrollProgress)}
+                  />
+                </StarWrapper>
+              ))}
+            </StarsContainer>
 
-      {/* Final Section */}
+            <BodyText style={{ marginTop: 32, fontWeight: 300 }}>
+              Give your attention to those who earn it—<br />
+              not those who exploit it
+            </BodyText>
+          </ContentWrapper>
+        </div>
+      </section>
+
+      {/* How it works section with two columns */}
+      {/* How it works section with parallax fade-in for cards */}
+      <ParallaxTallContainer ref={howItWorksParallax.ref as React.RefObject<HTMLDivElement>}>
+        <ParallaxStickyInner>
+          <ContentWrapper>
+            <SubHeading>How it works</SubHeading>
+            <HowItWorksRow>
+              <HowItWorksColumn left>
+                <ColumnSubheading style={{ maxWidth: 440, textAlign: 'left', margin: '0 auto 32px auto', wordBreak: 'break-word', whiteSpace: 'normal' }}>
+                  See ratings and analytics<br />for products and creators
+                </ColumnSubheading>
+                <HowItWorksImage style={{ opacity: leftCardOpacity, transition: 'opacity 0.6s' }}>
+                  <img src="/HIW1.png" alt="AG1 Ratings Popup" />
+                </HowItWorksImage>
+              </HowItWorksColumn>
+              <HowItWorksColumn>
+                <ColumnSubheading>
+                  Hide (or not) at your<br />desired trust level
+                </ColumnSubheading>
+                <HowItWorksImage style={{ opacity: rightCardOpacity, transition: 'opacity 0.6s' }}>
+                  <img src="/HIW2.png" alt="Trust Filter Cards" />
+                </HowItWorksImage>
+              </HowItWorksColumn>
+            </HowItWorksRow>
+          </ContentWrapper>
+        </ParallaxStickyInner>
+      </ParallaxTallContainer>
+
+      {/* Final Section - unchanged */}
       <FinalSection>
         <ContentWrapper>
           <BodyText as="div" style={{ margin: 0, fontWeight: 300, fontSize: 40, lineHeight: '60px' }}>
-            We'll keep every liar in check
+            We’ll keep every liar in check
           </BodyText>
           <JoinOfferBox
             as="a"
@@ -131,7 +190,7 @@ const LandingPage = () => {
             </JoinPrice>
           </JoinOfferBox>
           <OfferSubText>
-            We go live on November 1, don't miss our pre-sale special<br />
+            Get 1 year free before November, 1<br />
             Support the movement towards a cleaner happier life!
           </OfferSubText>
         </ContentWrapper>
@@ -174,18 +233,34 @@ const Section = styled.section`
 `;
 
 const ContentWrapper = styled.div`
-  width: 100%;
-  max-width: 1150px;
+  max-width: 1200px;
+  width: 85%;
   margin: 0 auto;
-  text-align: center;
-  padding: 0 24px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  @media (max-width: 600px) {
-    max-width: 95vw;
-    padding: 0 8px;
+  text-align: center;
+  padding: 20px 0 40px; /* Reduced vertical padding */
+  
+  @media (max-width: 1024px) {
+    padding: 20px 0 30px;
+    width: 90%;
+  }
+  
+  @media (max-width: 768px) {
+    padding: 10px 0 20px;
+    width: 95%;
+  }
+`;
+
+const MainHeadingContainer = styled.div`
+  width: 100%;
+  margin-bottom: 40px;
+  padding: 0 20px;
+  
+  @media (max-width: 768px) {
+    margin-bottom: 20px; /* Reduced from 30px */
+    padding: 0 10px;
   }
 `;
 
@@ -272,6 +347,22 @@ const StarWrapper = styled.div`
       height: 32px;
     }
   }
+`;
+
+const StarIcon = styled(FaStar)<{ active?: boolean }>`
+  color: ${props => props.active ? '#FF6B00' : '#D9D9D9'};
+  opacity: ${props => props.active ? 1 : 0.2};
+`;
+
+const EmptyStar = styled(FaStar)`
+  color: #D9D9D9;
+  opacity: 0.2;
+`;
+
+const StarOverlay = styled(FaStar)`
+  position: absolute;
+  top: 0;
+  left: 0;
 `;
 
 const FinalHeading = styled.h2`
@@ -374,7 +465,7 @@ const HowItWorksImage = styled.div`
   height: 220px;
   background: #fff;
   border-radius: 18px;
-  box-shadow: 0 2px 12px #00000010;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -501,13 +592,22 @@ const OfferSubText = styled.div`
 `;
 
 const HeroSection = styled.section`
+  background: #FFFFFF;
   width: 100%;
-  min-height: 100vh;
+  min-height: 90vh; /* Reduced from 100vh */
+  position: relative;
   display: flex;
   flex-direction: column;
-  align-items: center;
   justify-content: center;
-  background: #fff;
+  align-items: center;
+  padding: 30px 20px;
+  box-sizing: border-box;
+  
+  @media (max-width: 768px) {
+    padding: 20px 15px;
+    min-height: auto;
+    overflow: visible; /* Ensure content doesn't get clipped */
+  }
 `;
 
 const FinalSection = styled.section`
@@ -518,6 +618,385 @@ const FinalSection = styled.section`
   align-items: center;
   justify-content: center;
   background: #fff;
+`;
+
+// New styled components for the info table section
+const InfoTableRow = styled.div`
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  width: 100%;
+  margin-top: 40px;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 20px;
+  
+  @media (max-width: 900px) {
+    flex-direction: column;
+    align-items: center;
+    gap: 30px;
+  }
+`;
+
+const InfoTableColumn = styled.div<{ left?: boolean; right?: boolean; fullWidth?: boolean }>`
+  flex: ${props => props.fullWidth ? '1' : props.left ? '1' : '1.2'};
+  display: flex;
+  flex-direction: column;
+  align-items: ${props => props.left || props.fullWidth ? 'center' : 'flex-start'};
+  justify-content: flex-start;
+  padding: ${props => props.right ? '0 0 0 20px' : '0 20px 0 0'};
+  
+  @media (max-width: 900px) {
+    width: 100%;
+    padding: 0;
+    align-items: center;
+  }
+`;
+
+const MockupImage = styled.div`
+  max-width: 100%;
+  height: auto;
+  
+  img {
+    width: 100%;
+    height: auto;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+  
+  @media (max-width: 900px) {
+    max-width: 90%;
+  }
+`;
+
+const TrustRatingSection = styled.div`
+  width: 100%;
+  background: white;
+  border: 1px solid #e0e0e0;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  
+  @media (max-width: 900px) {
+    max-width: 90%;
+  }
+`;
+
+const TrustRatingHeader = styled.div`
+  font-family: 'Sofia Sans';
+  font-size: 24px;
+  color: #FF6B00;
+  margin-bottom: 10px;
+  text-align: left;
+`;
+
+const ProductInfo = styled.div`
+  margin-top: 25px;
+  text-align: left;
+`;
+
+const ProductName = styled.div`
+  font-family: 'Sofia Sans';
+  font-size: 22px;
+  font-weight: 500;
+  margin-bottom: 15px;
+`;
+
+const WarningList = styled.ul`
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+`;
+
+const WarningItem = styled.li<{ red?: boolean; yellow?: boolean }>`
+  font-family: 'Sofia Sans';
+  font-size: 18px;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  color: ${props => props.red ? '#D32F2F' : props.yellow ? '#F57C00' : '#000000'};
+`;
+
+const WarningIcon = styled.span`
+  margin-right: 10px;
+  font-size: 18px;
+`;
+
+const LearnMoreLink = styled.a`
+  font-family: 'Sofia Sans';
+  font-size: 16px;
+  color: #666;
+  text-decoration: none;
+  display: block;
+  margin-top: 15px;
+  cursor: pointer;
+  
+  &:hover {
+    text-decoration: underline;
+  }
+`;
+
+/* InvestigationsSection has been replaced by InvestigationsContainer */
+
+const InvestigationTitle = styled.div`
+  position: absolute;
+  top: 8px;
+  left: 18px;
+  font-family: 'Sofia Sans';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 24px;
+  line-height: 150%;
+  color: #000000;
+  margin-bottom: 15px; /* Reduced from 25px */
+  
+  @media (max-width: 768px) {
+    top: 5px;
+    left: 15px;
+    font-size: 22px;
+    margin-bottom: 10px;
+  }
+`;
+
+const InvestigationList = styled.ul`
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  
+  @media (max-width: 1200px) {
+    gap: 16px;
+  }
+  
+  @media (max-width: 768px) {
+    gap: 8px; /* Further reduced from 10px */
+  }
+`;
+
+const InvestigationItem = styled.li`
+  font-family: 'Sofia Sans';
+  font-style: italic;
+  font-weight: 300;
+  font-size: 30px;
+  line-height: 150%;
+  text-decoration-line: underline;
+  color: #000000;
+  cursor: pointer;
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 0;
+  max-width: 497px;
+  transition: color 0.2s;
+  
+  &:hover {
+    color: #555555;
+    text-decoration-line: underline;
+  }
+  
+  @media (max-width: 768px) {
+    font-size: 20px;
+  }
+`;
+
+const LinkIcon = styled.span`
+  margin-right: 10px;
+  font-size: 30px;
+  flex-shrink: 0;
+  
+  @media (max-width: 768px) {
+    font-size: 20px;
+  }
+`;
+
+const MoreLink = styled.a`
+  font-family: 'Sofia Sans';
+  font-style: normal;
+  font-weight: 300;
+  font-size: 20px;
+  line-height: 150%;
+  text-align: center;
+  text-decoration-line: underline;
+  color: #000000;
+  display: block;
+  position: absolute;
+  bottom: 15px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 149px;
+  cursor: pointer;
+  transition: color 0.2s;
+  
+  &:hover {
+    color: #555555;
+    text-decoration-line: underline;
+  }
+  
+  @media (max-width: 768px) {
+    position: relative;
+    bottom: auto;
+    left: auto;
+    transform: none;
+    margin: 10px auto 0;
+    font-size: 18px;
+    line-height: 130%;
+  }
+`;
+
+const HeroFlexContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  width: 1150px;
+  max-width: 100%;
+  margin: 0 auto;
+
+  @media (max-width: 1200px) {
+    flex-direction: column;
+    width: 100%;
+    gap: 20px;
+    align-items: center;
+    padding-bottom: 20px;
+  }
+
+  @media (max-width: 768px) {
+    gap: 5px; /* Reduced from 10px to 5px */
+    width: 100%;
+    align-items: center;
+    padding-bottom: 10px; /* Reduced padding */
+    margin-bottom: 0;
+  }
+`;
+
+const InvestigationsContainer = styled.div`
+  width: 490px;
+  min-height: 380px;
+  background: #FFFFFF;
+  border: 1px solid #000000;
+  border-radius: 15px;
+  padding: 50px 10px 40px 10px; /* Reduced top padding from 60px to 50px */
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  position: relative;
+  flex-shrink: 0;
+
+  @media (max-width: 1200px) {
+    width: 90%;
+    max-width: 490px;
+    min-height: 300px;
+    margin: 0 auto;
+    padding: 50px 10px 45px 10px; /* Reduced top padding from 60px to 50px */
+  }
+
+  @media (max-width: 768px) {
+    width: 95%;
+    max-width: 480px;
+    min-height: auto;
+    margin: 0 auto;
+    padding: 30px 5px 5px 5px; /* Reduced top padding from 35px to 30px */
+    align-self: center;
+    display: flex;
+    flex-direction: column;
+  }
+`;
+
+
+const ProductImageSection = styled.div`
+  position: relative;
+  width: 580px; /* Slightly reduced from 620px */
+  left: 0;
+  height: 360px; /* Slightly reduced from 390px */
+  flex-shrink: 0;
+  
+  @media (max-width: 1200px) {
+    position: relative; /* Keep relative to maintain child positioning */
+    width: 90%;
+    max-width: 580px;
+    margin: 0 auto;
+    /* Maintain aspect ratio */
+    height: auto;
+    min-height: 260px;
+    aspect-ratio: 580 / 360;
+  }
+  
+  @media (max-width: 768px) {
+    width: 95%;
+    max-width: 480px;
+    min-height: 220px;
+  }
+`;
+
+const SingleImageWrapper = styled.div`
+  width: 100%;
+  
+  img {
+    width: 100%;
+    height: auto;
+    border-radius: 12px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  }
+`;
+
+const ProductImageContainer = styled.div`
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 80%;
+  z-index: 1;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  overflow: hidden;
+  
+  img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+  
+  @media (max-width: 1200px) {
+    width: 75%;
+  }
+  
+  /* Keep positions absolute on all screen sizes */
+  @media (max-width: 768px) {
+    width: 75%;
+  }
+`;
+
+const TrustRatingContainer = styled.div`
+  position: absolute;
+  width: 50%;
+  right: 0;
+  top: 0;
+  z-index: 2;
+  background: white;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  overflow: hidden;
+  
+  img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    display: block;
+  }
+  
+  @media (max-width: 1200px) {
+    width: 50%;
+  }
+  
+  /* Keep positions consistent on mobile */
+  @media (max-width: 768px) {
+    width: 50%;
+  }
 `;
 
 export default LandingPage;
