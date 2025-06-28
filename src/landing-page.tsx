@@ -39,8 +39,9 @@ const LandingPage = () => {
         <ContentWrapper>
           <MainHeadingContainer>
             <MainHeading>
-              Crucial info when it matters -<br />
-              real-time warnings, ratings, and red flags
+              <span className="desktopOnly">Crucial info when it matters -</span>
+              <span className="mobileOnly">Crucial info when it matters</span>
+              <span className="secondLine">real-time warnings, ratings, and red flags</span>
             </MainHeading>
           </MainHeadingContainer>
           
@@ -251,16 +252,38 @@ const ContentWrapper = styled.div`
     padding: 10px 0 20px;
     width: 95%;
   }
+  
+  .hero-section & {
+    @media (max-width: 768px) {
+      padding: 60px 0 40px; /* Increased padding for mobile */
+      height: 75vh;
+      position: relative;
+      justify-content: space-between;
+    }
+  }
 `;
 
 const MainHeadingContainer = styled.div`
   width: 100%;
   margin-bottom: 40px;
   padding: 0 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   
   @media (max-width: 768px) {
-    margin-bottom: 20px; /* Reduced from 30px */
+    margin-bottom: 20px;
     padding: 0 10px;
+  }
+  
+  .hero-section & {
+    @media (max-width: 768px) {
+      margin-bottom: 0;
+      padding: 0;
+      width: 100vw;
+      max-width: 100vw;
+      padding-top: 80px; /* Added top spacing */
+    }
   }
 `;
 
@@ -272,9 +295,47 @@ const MainHeading = styled.h1`
   color: #000;
   margin: 0 0 24px 0;
   text-align: center;
+  width: 100%;
+  max-width: 100%;
+  
+  span {
+    width: 100%;
+    display: block;
+    text-align: center;
+  }
+  
+  span.secondLine {
+    display: block;
+  }
+  
+  span.mobileOnly {
+    display: none;
+  }
+  
   @media (max-width: 600px) {
     font-size: 30px;
     line-height: 38px;
+    padding: 0;
+    width: 100%;
+    
+    span.desktopOnly {
+      display: none;
+    }
+    
+    span.mobileOnly {
+      display: block;
+      width: 100%;
+      text-align: center;
+    }
+    
+    span.secondLine {
+      font-size: 16px;
+      line-height: 24px;
+      width: 100%;
+      text-align: center;
+      padding: 0 5px;
+      white-space: nowrap;
+    }
   }
 `;
 
@@ -591,7 +652,7 @@ const OfferSubText = styled.div`
   }
 `;
 
-const HeroSection = styled.section`
+const HeroSection = styled.section.attrs({ className: 'hero-section' })`
   background: #FFFFFF;
   width: 100%;
   min-height: 90vh; /* Reduced from 100vh */
@@ -604,9 +665,11 @@ const HeroSection = styled.section`
   box-sizing: border-box;
   
   @media (max-width: 768px) {
-    padding: 20px 15px;
-    min-height: auto;
+    padding: 0;
+    min-height: 75vh; /* 3/4 of viewport height */
     overflow: visible; /* Ensure content doesn't get clipped */
+    position: relative;
+    justify-content: flex-start;
   }
 `;
 
@@ -741,7 +804,7 @@ const LearnMoreLink = styled.a`
 
 const InvestigationTitle = styled.div`
   position: absolute;
-  top: 8px;
+  top: 20px;
   left: 18px;
   font-family: 'Sofia Sans';
   font-style: normal;
@@ -749,30 +812,30 @@ const InvestigationTitle = styled.div`
   font-size: 24px;
   line-height: 150%;
   color: #000000;
-  margin-bottom: 15px; /* Reduced from 25px */
   
   @media (max-width: 768px) {
-    top: 5px;
+    top: 15px;
     left: 15px;
     font-size: 22px;
-    margin-bottom: 10px;
   }
 `;
 
 const InvestigationList = styled.ul`
   list-style-type: none;
   padding: 0;
-  margin: 0;
+  margin: 30px 0 0 0; /* Added top margin to create space after the title */
   text-align: left;
   display: flex;
   flex-direction: column;
   gap: 10px;
   
   @media (max-width: 1200px) {
+    margin-top: 25px;
     gap: 16px;
   }
   
   @media (max-width: 768px) {
+    margin-top: 20px;
     gap: 8px; /* Further reduced from 10px */
   }
 `;
@@ -865,11 +928,19 @@ const HeroFlexContainer = styled.div`
   }
 
   @media (max-width: 768px) {
-    gap: 5px; /* Reduced from 10px to 5px */
+    gap: 5px;
     width: 100%;
     align-items: center;
-    padding-bottom: 10px; /* Reduced padding */
+    padding-bottom: 10px;
     margin-bottom: 0;
+  }
+  
+  .hero-section & {
+    @media (max-width: 768px) {
+      padding-bottom: 0;
+      position: absolute;
+      bottom: -80px; /* Position below the viewport by 80px to peek out */
+    }
   }
 `;
 
@@ -879,7 +950,7 @@ const InvestigationsContainer = styled.div`
   background: #FFFFFF;
   border: 1px solid #000000;
   border-radius: 15px;
-  padding: 50px 10px 40px 10px; /* Reduced top padding from 60px to 50px */
+  padding: 60px 10px 40px 10px; /* Increased top padding for better title spacing */
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   box-sizing: border-box;
   display: flex;
@@ -893,7 +964,7 @@ const InvestigationsContainer = styled.div`
     max-width: 490px;
     min-height: 300px;
     margin: 0 auto;
-    padding: 50px 10px 45px 10px; /* Reduced top padding from 60px to 50px */
+    padding: 55px 10px 45px 10px; /* Adjusted top padding for tablet view */
   }
 
   @media (max-width: 768px) {
@@ -901,7 +972,7 @@ const InvestigationsContainer = styled.div`
     max-width: 480px;
     min-height: auto;
     margin: 0 auto;
-    padding: 30px 5px 5px 5px; /* Reduced top padding from 35px to 30px */
+    padding: 40px 5px 5px 5px; /* Increased top padding for mobile view */
     align-self: center;
     display: flex;
     flex-direction: column;
@@ -977,7 +1048,6 @@ const TrustRatingContainer = styled.div`
   right: 0;
   top: 0;
   z-index: 2;
-  background: white;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
   border-radius: 12px;
   overflow: hidden;
