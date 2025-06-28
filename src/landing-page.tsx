@@ -41,7 +41,9 @@ const LandingPage = () => {
             <MainHeading>
               <span className="desktopOnly">Crucial info when it matters -</span>
               <span className="mobileOnly">Crucial info when it matters</span>
-              <span className="secondLine">real-time warnings, ratings, and red flags</span>
+              <span className="secondLine desktopOnly">real-time warnings, ratings, and red flags</span>
+              <span className="secondLine mobileOnly">real-time warnings, ratings,</span>
+              <span className="secondLine redFlags mobileOnly">and red flags</span>
             </MainHeading>
           </MainHeadingContainer>
           
@@ -75,27 +77,19 @@ const LandingPage = () => {
         </ContentWrapper>
       </HeroSection>
 
-      {/* Why it can't wait section with parallax fade-in */}
-      {/* Why it can't wait section with working parallax fade-in */}
-      <ParallaxTallContainer ref={whyWaitParallax.ref as React.RefObject<HTMLDivElement>}>
-        <ParallaxStickyInner>
-          <ContentWrapper style={{ maxWidth: '100vw' }}>
-            <SubHeading>
-              Why it can't wait
-            </SubHeading>
-            <div style={{ textAlign: 'left', margin: '32px auto', maxWidth: 950, padding: '0 24px' }}>
-              {whyWaitStatements.map((text, i) => {
-                // Fade in each statement at 0.15, 0.45, 0.75 progress
-                const fadeStart = 0.15 + i * 0.3;
-                const fade = Math.min(1, Math.max(0, (whyWaitParallax.scrollProgress - fadeStart) / 0.18));
-                return (
-                  <BodyText as="div" key={i} style={{ marginBottom: 16, opacity: fade, transition: 'opacity 0.5s' }}>{text}</BodyText>
-                );
-              })}
-            </div>
-          </ContentWrapper>
-        </ParallaxStickyInner>
-      </ParallaxTallContainer>
+      {/* Why it can't wait section - static version with margin */}
+      <section style={{ marginTop: '280px' }}>
+        <ContentWrapper style={{ maxWidth: '100vw' }}>
+          <SubHeading>
+            Why it can't wait
+          </SubHeading>
+          <div style={{ textAlign: 'left', margin: '32px auto', maxWidth: 950, padding: '0 24px' }}>
+            {whyWaitStatements.map((text, i) => (
+              <BodyText as="div" key={i} style={{ marginBottom: 16 }}>{text}</BodyText>
+            ))}
+          </div>
+        </ContentWrapper>
+      </section>
 
 
 
@@ -255,10 +249,12 @@ const ContentWrapper = styled.div`
   
   .hero-section & {
     @media (max-width: 768px) {
-      padding: 60px 0 40px; /* Increased padding for mobile */
+      padding: 0;
       height: 75vh;
       position: relative;
-      justify-content: space-between;
+      justify-content: flex-start; /* Align to top */
+      align-items: center;
+      padding-top: 20vh; /* Push content down further from top */
     }
   }
 `;
@@ -278,11 +274,10 @@ const MainHeadingContainer = styled.div`
   
   .hero-section & {
     @media (max-width: 768px) {
-      margin-bottom: 0;
+      margin: 0;
       padding: 0;
       width: 100vw;
       max-width: 100vw;
-      padding-top: 80px; /* Added top spacing */
     }
   }
 `;
@@ -329,12 +324,22 @@ const MainHeading = styled.h1`
     }
     
     span.secondLine {
-      font-size: 16px;
-      line-height: 24px;
+      font-size: 25px;
+      line-height: 30px;
       width: 100%;
       text-align: center;
       padding: 0 5px;
       white-space: nowrap;
+      margin-top: 5px;
+    }
+    
+    span.redFlags {
+      margin-top: 0;
+      display: block;
+    }
+    
+    span.secondLine.desktopOnly {
+      display: none;
     }
   }
 `;
@@ -939,7 +944,9 @@ const HeroFlexContainer = styled.div`
     @media (max-width: 768px) {
       padding-bottom: 0;
       position: absolute;
-      bottom: -80px; /* Position below the viewport by 80px to peek out */
+      top: 55vh; /* Position much lower on the viewport */
+      z-index: 2; /* Ensure it appears above other elements */
+      transform: scale(0.9); /* Slightly scale down images */
     }
   }
 `;
@@ -1001,7 +1008,7 @@ const ProductImageSection = styled.div`
   @media (max-width: 768px) {
     width: 95%;
     max-width: 480px;
-    min-height: 220px;
+    min-height: 160px; /* Reduced height for better mobile spacing */
   }
 `;
 
