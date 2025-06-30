@@ -1,18 +1,69 @@
 import React, { useRef, useState, useEffect } from 'react';
 import styled from 'styled-components';
 import useParallax from './useParallax.ts';
-import { useFadeInParallax } from './useFadeInParallax';
 import { FaStar } from 'react-icons/fa';
 
 const LandingPage = () => {
-  // Restore parallax for stars
+  // --- image sets definition ---
+  const productImages = ['/Slide11.png', '/Slide21.png', '/Slide31.png'];
+  const trustImages   = ['/Slide12.png', '/Slide22.png', '/Slide32.png'];
+
+  const [setIndex, setSetIndex] = useState(0);
+  const [fading, setFading] = useState(false);
+
+  // Parallax hooks for each sticky section
+  const heroParallax = useParallax();  // Main hero section (formerly "Why it can't wait top")
   const starsParallax = useParallax();
+  const starsParallax2 = useParallax();
+  // helper: 0 when p<start, 1 when p> end, linear in-between
+  // For this hook, scrollProgress is 0 at section top (start) and increases toward 1 as we scroll down
+  const fadeBetween = (scrollProgress: number, start: number, end: number) => {
+    const p = scrollProgress;
+    if (p <= start) return 0;        // before start threshold -> hidden
+    if (p >= end) return 1;          // past end threshold -> fully visible
+    return (p - start) / (end - start);
+  };
+
+
+    // Use different thresholds per viewport size
+  const isMobile = typeof window !== 'undefined' && window.innerWidth <= 768;
+
+  // Scroll-percentage based thresholds for the hero section (progress goes 0→01)
+  const trustStart = 0.0;  // fully hidden until section enters
+  const trustEnd   = 0.10; // images fully visible by 10% scroll
+  const invStart   = 0.10; // investigations start fading at 10%
+  const invEnd     = 0.20; // investigations fully visible by 20% scroll
+
+  // Calculate opacity values based on scroll progress
+  const trustOpacity = fadeBetween(heroParallax.scrollProgress, trustStart, trustEnd);
+  const investigationsOpacity = fadeBetween(heroParallax.scrollProgress, invStart, invEnd);
+
+
+
+
+
+  // Scroll-based image set transitions
+  useEffect(() => {
+    const p = heroParallax.scrollProgress;
+    let targetIndex = 0;
+    
+    if (p >= 0.4 && p < 0.7) targetIndex = 1; // between 40% and 70%
+    else if (p >= 0.7) targetIndex = 2;       // after 70%
+
+    if (targetIndex !== setIndex) {
+      setFading(true);
+      setTimeout(() => {
+        setSetIndex(targetIndex);
+        setFading(false);
+      }, 300);
+    }
+  }, [heroParallax.scrollProgress, setIndex]);
 
   // Parallax fade-in for How it works cards
   const howItWorksParallax = useParallax();
   // Fade logic: left card fades in from 0.1 to 0.4, right card from 0.4 to 0.7
-  const leftCardOpacity = Math.min(1, Math.max(0, (howItWorksParallax.scrollProgress - 0.1) / 0.3));
-  const rightCardOpacity = Math.min(1, Math.max(0, (howItWorksParallax.scrollProgress - 0.4) / 0.3));
+  const leftCardOpacity = howItWorksParallax.isVisible ? Math.min(1, Math.max(0, (howItWorksParallax.scrollProgress - 0.1) / 0.3)) : 0;
+  const rightCardOpacity = howItWorksParallax.isVisible ? Math.min(1, Math.max(0, (howItWorksParallax.scrollProgress - 0.4) / 0.3)) : 0;
 
   // Parallax fade-in for 'Why it can't wait' section
   const whyWaitStatements = [
@@ -20,7 +71,6 @@ const LandingPage = () => {
     '• Competition is over who lies bigger (not product quality)',
     '• This leads to financial and mental damage for consumers by creating unrealistic expectations',
   ];
-  const whyWaitParallax = useParallax();
 
   // Helper to animate star fill based on scroll progress
   const getStarFill = (index: number, progress: number) => {
@@ -34,78 +84,144 @@ const LandingPage = () => {
 
   return (
     <PageContainer>
-      {/* Hero Section - Updated with Table */}
-      <HeroSection>
-        <ContentWrapper>
-          <MainHeadingContainer>
-            <MainHeading>
-              <span className="desktopOnly">Crucial info when it matters -</span>
-              <span className="mobileOnly">Crucial info when it matters</span>
-              <span className="secondLine desktopOnly">real-time warnings, ratings, and red flags</span>
-              <span className="secondLine mobileOnly">
-                real-time warnings, ratings,<br />
-                and red flags
-              </span>
-            </MainHeading>
-          </MainHeadingContainer>
-          
-          {/* Hero section: two containers - (1) product/trust images, (2) investigations table */}
-          <HeroFlexContainer>
-            <ProductImageSection>
-              <ProductImageContainer>
-                <img src="/Slide11.png" alt="AG1 website on laptop" />
-              </ProductImageContainer>
-              <TrustRatingContainer>
-                <img src="/Slide12.png" alt="Trust rating details" />
-              </TrustRatingContainer>
-            </ProductImageSection>
+      {/* Small top spacer to ensure the hero section starts just below the initial viewport */}
+      <div style={{ height: '20vh', width: '100%', background: '#fff' }} />
 
-            <InvestigationsContainer>
-              <InvestigationTitle>AG1 Investigations:</InvestigationTitle>
-              <InvestigationList>
-                <InvestigationItem as="a" href="https://b2bnews.co.nz/articles/fda-investigates-ag1-amid-serious-liver-harm-reports/" target="_blank" rel="noopener noreferrer">
-                  <LinkIcon>🔗</LinkIcon> FDA Investigates AG1 Amid Serious Liver Harm Reports
-                </InvestigationItem>
-                <InvestigationItem as="a" href="https://www.nzherald.co.nz/business/billion-dollar-company-ag1-founder-chris-ashenden-resigns-amid-scrutiny-of-nz-criminal-history/SBBOE7BOCBDJNNBDRND3KCH2PA/" target="_blank" rel="noopener noreferrer">
-                  <LinkIcon>🔗</LinkIcon> AG1 founder resigns amid scrutiny of criminal history
-                </InvestigationItem>
-                <InvestigationItem as="a" href="https://www.mcgill.ca/oss/article/critical-thinking-health-and-nutrition/you-probably-dont-need-green-ag1-smoothie" target="_blank" rel="noopener noreferrer">
-                  <LinkIcon>🔗</LinkIcon> You Probably Don't Need that Green AG1 Smoothie
-                </InvestigationItem>
-              </InvestigationList>
-              <MoreLink as="a" href="#" target="_blank" rel="noopener noreferrer">More</MoreLink>
-            </InvestigationsContainer>
-          </HeroFlexContainer>
-        </ContentWrapper>
-      </HeroSection>
+      {/* Main Hero Section */}
+      <section
+        ref={heroParallax.ref as React.RefObject<HTMLElement>}
+        style={{ height: '300vh', position: 'relative', width: '100%' }}
+      >
+        <div
+          style={{
+            position: 'sticky',
+            top: 0,
+            height: '100vh',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            background: '#fff',
+            zIndex: 2,
+          }}
+        >
+          <ContentWrapper>
+            <MainHeadingContainer>
+              <MainHeading>
+                <span className="desktopOnly">Crucial info when it matters -</span>
+                <span className="mobileOnly">Crucial info when it matters</span>
+                <span className="secondLine desktopOnly">real-time warnings, ratings, and red flags</span>
+                <span className="secondLine mobileOnly">
+                  real-time warnings, ratings,<br />
+                  and red flags
+                </span>
+              </MainHeading>
+            </MainHeadingContainer>
 
-      {/* Why it can't wait section with parallax fade-in */}
-      {/* Why it can't wait section with working parallax fade-in */}
-      <ParallaxTallContainer ref={whyWaitParallax.ref as React.RefObject<HTMLDivElement>}>
-        <ParallaxStickyInner>
-          <ContentWrapper style={{ maxWidth: '100vw' }}>
-            <SubHeading>
-              Why it can't wait
-            </SubHeading>
-            <div style={{ textAlign: 'left', margin: '32px auto', maxWidth: 950, padding: '0 24px' }}>
-              {whyWaitStatements.map((text, i) => {
-                // Fade in each statement at 0.15, 0.45, 0.75 progress
-                const fadeStart = 0.15 + i * 0.3;
-                const fade = Math.min(1, Math.max(0, (whyWaitParallax.scrollProgress - fadeStart) / 0.18));
-                return (
-                  <BodyText as="div" key={i} style={{ marginBottom: 16, opacity: fade, transition: 'opacity 0.5s' }}>{text}</BodyText>
-                );
-              })}
-            </div>
+            {/* Copied hero visuals */}
+            <HeroFlexContainer>
+              <ProductImageSection>
+                <ProductImageContainer style={{ opacity: fading ? 0 : 1, transition: 'opacity 0.5s' }}>
+                  <img src={productImages[setIndex]} alt="product variant" />
+                </ProductImageContainer>
+                <TrustRatingContainer style={{ opacity: fading ? 0 : trustOpacity, transition: 'opacity 0.6s' }}>
+                  <img src={trustImages[setIndex]} alt="Trust rating details" />
+                </TrustRatingContainer>
+              </ProductImageSection>
+
+              {/* Show different investigation containers based on the current set */}
+              {setIndex === 0 && (
+                <InvestigationsContainer style={{ opacity: fading ? 0 : investigationsOpacity, transition: 'opacity 0.6s' }}>
+                  <InvestigationTitle>AG1 Investigations:</InvestigationTitle>
+                  <InvestigationList>
+                    <InvestigationItem as="a" href="https://b2bnews.co.nz/articles/fda-investigates-ag1-amid-serious-liver-harm-reports/" target="_blank" rel="noopener noreferrer">
+                      <LinkIcon>🔗</LinkIcon> FDA Investigates AG1 Amid Serious Liver Harm Reports
+                    </InvestigationItem>
+                    <InvestigationItem as="a" href="https://www.nzherald.co.nz/business/billion-dollar-company-ag1-founder-chris-ashenden-resigns-amid-scrutiny-of-nz-criminal-history/SBBOE7BOCBDJNNBDRND3KCH2PA/" target="_blank" rel="noopener noreferrer">
+                      <LinkIcon>🔗</LinkIcon> AG1 founder resigns amid scrutiny of criminal history
+                    </InvestigationItem>
+                    <InvestigationItem as="a" href="https://www.mcgill.ca/oss/article/critical-thinking-health-and-nutrition/you-probably-dont-need-green-ag1-smoothie" target="_blank" rel="noopener noreferrer">
+                      <LinkIcon>🔗</LinkIcon> You Probably Don't Need that Green AG1 Smoothie
+                    </InvestigationItem>
+                  </InvestigationList>
+                  <MoreLink as="a" href="#" target="_blank" rel="noopener noreferrer">More</MoreLink>
+                </InvestigationsContainer>
+              )}
+              
+              {setIndex === 1 && (
+                <InvestigationsContainer style={{ opacity: fading ? 0 : investigationsOpacity, transition: 'opacity 0.6s' }}>
+                  <InvestigationTitle>Honey Investigations:</InvestigationTitle>
+                  <InvestigationList>
+                    <InvestigationItem as="a" href="https://www.moneymag.com.au/honey-browser-extension-accused-of-scamming-customers" target="_blank" rel="noopener noreferrer">
+                      <LinkIcon>🔗</LinkIcon> Honey browser extension accused of scamming customers
+                    </InvestigationItem>
+                    <InvestigationItem as="a" href="https://www.youtube.com/watch?v=EAx_RtMKPm8" target="_blank" rel="noopener noreferrer">
+                      <LinkIcon>🔗</LinkIcon> The Honey Scam: Explained
+                    </InvestigationItem>
+                    <InvestigationItem as="a" href="https://mashable.com/video/honey-brower-extension-scam" target="_blank" rel="noopener noreferrer">
+                      <LinkIcon>🔗</LinkIcon> Honey 'scam' allegedly duped influencers and shoppers
+                    </InvestigationItem>
+                  </InvestigationList>
+                  <MoreLink as="a" href="#" target="_blank" rel="noopener noreferrer">More</MoreLink>
+                </InvestigationsContainer>
+              )}
+              
+              {setIndex === 2 && (
+                <InvestigationsContainer style={{ opacity: fading ? 0 : investigationsOpacity, transition: 'opacity 0.6s' }}>
+                  <InvestigationTitle>Logan Paul Investigations:</InvestigationTitle>
+                  <InvestigationList>
+                    <InvestigationItem as="a" href="https://www.primaslaw.co.uk/news/logan-paul-crypto-scam-the-red-flag-signs-of-a-scam-everyone-should-know/" target="_blank" rel="noopener noreferrer">
+                      <LinkIcon>🔗</LinkIcon> Logan Paul Crypto Scam: The red flag signs everyone should know
+                    </InvestigationItem>
+                    <InvestigationItem as="a" href="https://www.youtube.com/watch?v=386p68_lDHA" target="_blank" rel="noopener noreferrer">
+                      <LinkIcon>🔗</LinkIcon> Investigating Logan Paul's Scams
+                    </InvestigationItem>
+                    <InvestigationItem as="a" href="https://www.dailymail.co.uk/news/article-14105209/logan-paul-misleading-followers-crypto-investments-coins.html" target="_blank" rel="noopener noreferrer">
+                      <LinkIcon>🔗</LinkIcon> Logan Paul accused of misleading followers over crypto...
+                    </InvestigationItem>
+                  </InvestigationList>
+                  <MoreLink as="a" href="#" target="_blank" rel="noopener noreferrer">More</MoreLink>
+                </InvestigationsContainer>
+              )}
+            </HeroFlexContainer>
           </ContentWrapper>
-        </ParallaxStickyInner>
-      </ParallaxTallContainer>
-
-
+        </div>
+      </section>
 
       {/* How did we solve it section - Parallax Sticky Stars */}
       <section
         ref={starsParallax.ref as React.RefObject<HTMLElement>}
+        style={{ height: '300vh', position: 'relative', width: '100%' }}
+      >
+        <div
+          style={{
+            position: 'sticky',
+            top: 0,
+            height: '100vh',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            background: '#fff',
+            zIndex: 2,
+          }}
+        >
+          <ContentWrapper>
+            <SubHeading>
+              Why it can't wait
+            </SubHeading>
+            <div style={{ textAlign: 'left', margin: '32px auto', maxWidth: 950, padding: '0 24px' }}>
+              {whyWaitStatements.map((text, i) => (
+                <BodyText as="div" key={`ww-${i}`} style={{ marginBottom: 16, fontWeight: 300, opacity: Math.min(1, Math.max(0, (starsParallax.scrollProgress - (0.15 + i * 0.3)) / 0.18)), transition: 'opacity 0.5s' }}>
+                  {text}
+                </BodyText>
+              ))}
+            </div>
+          </ContentWrapper>
+        </div>
+      </section>
+
+      {/* Duplicate Solution section */}
+      <section
+        ref={starsParallax2.ref as React.RefObject<HTMLElement>}
         style={{ height: '300vh', position: 'relative', width: '100%' }}
       >
         <div
@@ -135,7 +251,7 @@ const LandingPage = () => {
                   <EmptyStar size={40} />
                   <StarOverlay 
                     size={40}
-                    color={getStarFill(index, starsParallax.scrollProgress)}
+                    color={getStarFill(index, starsParallax2.scrollProgress)}
                   />
                 </StarWrapper>
               ))}
@@ -675,7 +791,7 @@ const HeroSection = styled.section.attrs({ className: 'hero-section' })`
   @media (max-width: 768px) {
     padding: 0;
     min-height: 90vh; /* show full hero plus some overhang */
-    padding-bottom: 120px; /* allow images to peek */
+    padding-bottom: 280px; /* further increased to ensure full clearance */
     overflow: visible;
     position: relative;
     justify-content: flex-start;
@@ -1070,13 +1186,10 @@ const TrustRatingContainer = styled.div`
   
   /* Keep positions consistent on mobile */
   @media (max-width: 768px) {
-    width: 50%;
+    width: 60%; /* enlarged by ~20% compared to previous 50% */
   }
 `;
 
 export default LandingPage;
-
-
-
 
 

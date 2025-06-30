@@ -30,7 +30,18 @@ const useParallax = () => {
     };
 
     window.addEventListener('scroll', handleScroll);
-    handleScroll(); // Initial calculation
+    
+    // Initial check for visibility only, without triggering full animation calculations
+    const initialCheck = () => {
+      if (!ref.current) return;
+      const element = ref.current;
+      const rect = element.getBoundingClientRect();
+      const viewportHeight = window.innerHeight;
+      const isInView = rect.top <= viewportHeight && rect.bottom >= 0;
+      setIsVisible(isInView);
+    };
+    
+    initialCheck();
 
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
