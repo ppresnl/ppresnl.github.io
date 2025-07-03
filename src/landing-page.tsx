@@ -69,7 +69,7 @@ const LandingPage = () => {
   const whyWaitStatements = [
     '• False promises became No.1 marketing tactic',
     '• Competition is over who lies bigger (not product quality)',
-    '• This leads to financial and mental damage for consumers by creating unrealistic expectations',
+    '• This leads to financial and mental damage for consumers',
   ];
 
   // Helper to animate star fill based on scroll progress
@@ -187,6 +187,54 @@ const LandingPage = () => {
         </div>
       </section>
 
+      {/* Duplicate Join Today Section */}
+      <div style={{ 
+        background: '#fff', 
+        padding: '120px 0',
+        position: 'relative',
+        zIndex: 2
+      }}>
+        <ContentWrapper>
+          <SubHeading style={{ 
+            textAlign: 'center', 
+            marginBottom: '40px',
+            fontSize: '32px',
+            lineHeight: '1.4',
+            maxWidth: '800px',
+            marginLeft: 'auto',
+            marginRight: 'auto'
+          }}>
+            If you're tired of lies online, support our presale
+          </SubHeading>
+          <JoinOfferBox
+            as="a"
+            href="https://neurolock.gumroad.com/l/fehbt?wanted=true"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ 
+              margin: '40px auto',
+              padding: '20px 40px'
+            }}
+          >
+            <JoinTodayText>Join & get 1 year free</JoinTodayText>
+            <JoinPrice style={{ marginTop: '15px' }}>
+              2 years for <OldPrice>$19.98</OldPrice> $9.99
+            </JoinPrice>
+          </JoinOfferBox>
+          <OfferSubText style={{ 
+            textAlign: 'center',
+            fontSize: '20px',
+            lineHeight: '1.6',
+            maxWidth: '600px',
+            margin: '40px auto 0',
+            padding: '0 20px'
+          }}>
+            Launching end of 2025<br />
+            Let's bring accountability back to the world — together!
+          </OfferSubText>
+        </ContentWrapper>
+      </div>
+
       {/* How did we solve it section - Parallax Sticky Stars */}
       <section
         ref={starsParallax.ref as React.RefObject<HTMLElement>}
@@ -282,7 +330,7 @@ const LandingPage = () => {
               </HowItWorksColumn>
               <HowItWorksColumn>
                 <ColumnSubheading>
-                  Hide (or not) at your<br />desired trust level
+                  Hide at your<br />desired trust level
                 </ColumnSubheading>
                 <HowItWorksImage style={{ opacity: rightCardOpacity, transition: 'opacity 0.6s' }}>
                   <img src="/HIW2.png" alt="Trust Filter Cards" />
@@ -307,11 +355,10 @@ const LandingPage = () => {
           >
             <JoinTodayText>Join today</JoinTodayText>
             <JoinPrice>
-              2 years for <OldPrice>11.98</OldPrice> 5.99
+              2 years for <OldPrice>$19.98</OldPrice> $9.99
             </JoinPrice>
           </JoinOfferBox>
           <OfferSubText>
-            Get 1 year free before November, 1<br />
             Support the movement towards a cleaner happier life!
           </OfferSubText>
         </ContentWrapper>
@@ -779,7 +826,8 @@ const OfferSubText = styled.div`
 const HeroSection = styled.section.attrs({ className: 'hero-section' })`
   background: #FFFFFF;
   width: 100%;
-  min-height: 90vh; /* Reduced from 100vh */
+  min-height: 90vh; /* Minimum viewport height */
+  height: 180vh; /* Double the scroll length */
   position: relative;
   display: flex;
   flex-direction: column;
@@ -790,7 +838,8 @@ const HeroSection = styled.section.attrs({ className: 'hero-section' })`
   
   @media (max-width: 768px) {
     padding: 0;
-    min-height: 90vh; /* show full hero plus some overhang */
+    min-height: 90vh; /* Minimum viewport height */
+    height: 180vh; /* Double the scroll length on mobile */
     padding-bottom: 280px; /* further increased to ensure full clearance */
     overflow: visible;
     position: relative;
@@ -1066,7 +1115,7 @@ const HeroFlexContainer = styled.div`
 
 const InvestigationsContainer = styled.div`
   width: 490px;
-  min-height: 380px;
+  height: 480px; /* Fixed height for desktop */
   background: #FFFFFF;
   border: 1px solid #000000;
   border-radius: 15px;
@@ -1078,11 +1127,12 @@ const InvestigationsContainer = styled.div`
   justify-content: flex-start;
   position: relative;
   flex-shrink: 0;
+  overflow-y: auto; /* Add scroll if content overflows */
 
   @media (max-width: 1200px) {
     width: 90%;
     max-width: 490px;
-    min-height: 300px;
+    height: 400px; /* Fixed height for tablet */
     margin: 0 auto;
     padding: 55px 10px 45px 10px; /* Adjusted top padding for tablet view */
   }
@@ -1090,7 +1140,8 @@ const InvestigationsContainer = styled.div`
   @media (max-width: 768px) {
     width: 100%;
     max-width: 100%;
-    min-height: auto;
+    height: auto; /* Auto height for mobile */
+    min-height: 320px; /* Adjusted minimum height for mobile */
     margin: 20px auto 0; /* add space above investigations */
     padding: 40px 5px 5px 5px; /* Increased top padding for mobile view */
     align-self: center;
