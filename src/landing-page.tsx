@@ -221,14 +221,7 @@ const LandingPage = () => {
               2 years for <OldPrice>$19.98</OldPrice> $9.99
             </JoinPrice>
           </JoinOfferBox>
-          <OfferSubText style={{ 
-            textAlign: 'center',
-            fontSize: '20px',
-            lineHeight: '1.6',
-            maxWidth: '600px',
-            margin: '40px auto 0',
-            padding: '0 20px'
-          }}>
+          <OfferSubText>
             Launching end of 2025<br />
             Let's bring accountability back to the world — together!
           </OfferSubText>
@@ -811,15 +804,18 @@ const OldPrice = styled.span`
 const OfferSubText = styled.div`
   font-family: 'Sofia Sans', sans-serif;
   font-weight: 300;
-  font-size: 32px;
-  line-height: 48px;
-  margin-top: 40px;
+  font-size: 28px;
+  line-height: 1.5;
+  margin: 40px auto 0;
+  max-width: 800px;
+  padding: 0 20px;
   color: #222;
   text-align: center;
-  @media (max-width: 600px) {
+  
+  @media (max-width: 768px) {
     font-size: 20px;
-    line-height: 28px;
-    margin-top: 24px;
+    line-height: 1.6;
+    margin-top: 30px;
   }
 `;
 
